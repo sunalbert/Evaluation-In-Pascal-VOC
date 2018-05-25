@@ -5,7 +5,7 @@
 
 import numpy as np
 import json
-from pascal_voc import PascalVOC
+from DetmAPinVOC import DetmAPinVOC
 from gluoncv.data.pascal_voc.detection import VOCDetection
 
 DEBUG = False
@@ -44,12 +44,10 @@ def res_to_allbbox(voc_classes, path=VOC_2007_JSON_PATH):
 
 def from_VOC_label():
     voc_2007_test_set = VOCDetection(
-        root='/data/yunfan.lu/App/cc.hobot.yunfan/mx-detectron-old/data/VOCdevkit',
+        root='/Users/yunfanlu/WorkPlace/MyData/VOCDevkit',
         splits=((2007, 'test'),)
     )
-
     voc_2007_det_label = {}
-
     for ind in range(len(voc_2007_test_set)):
         image_ind = voc_2007_test_set._items[ind][1]
         bbox_list = voc_2007_test_set[ind][1]
@@ -59,7 +57,6 @@ def from_VOC_label():
             class_id = int(bbox[4])
             class_name = voc_2007_test_set.CLASSES[class_id]
             class_new_id = pascalVOC.classes.index(class_name)
-
             if class_new_id not in voc_2007_det_label.keys():
                 voc_2007_det_label[class_new_id] = {}
             if image_ind not in voc_2007_det_label[class_new_id].keys():
@@ -73,13 +70,13 @@ def from_VOC_label():
     return voc_2007_det_label
 
 if __name__ == '__main__':
-    pascalVOC = PascalVOC(
+    pascalVOC = DetmAPinVOC(
         image_set='2007_test',
-        root_path='',
-        devkit_path='/data/yunfan.lu/App/cc.hobot.yunfan/mx-detectron-old/data/VOCdevkit',
-    )
+        devkit_path='/Users/yunfanlu/WorkPlace/MyData/VOCDevkit')
+
     if DEBUG:
         detections = from_VOC_label()
     else:
         detections = res_to_allbbox(voc_classes=pascalVOC.classes)
+
     pascalVOC.evaluate_detections(detections=detections)
