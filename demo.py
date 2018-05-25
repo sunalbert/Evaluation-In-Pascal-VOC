@@ -8,7 +8,7 @@ import json
 from DetmAPinVOC import DetmAPinVOC
 from gluoncv.data.pascal_voc.detection import VOCDetection
 
-DEBUG = False
+DEBUG = True
 
 VOC_2007_JSON_PATH = './VOC2007-SSD-512.json'
 
@@ -51,7 +51,6 @@ def from_VOC_label():
     for ind in range(len(voc_2007_test_set)):
         image_ind = voc_2007_test_set._items[ind][1]
         bbox_list = voc_2007_test_set[ind][1]
-        print(image_ind)
         for bbox in bbox_list:
             bbox_coord = bbox[:4].tolist()
             class_id = int(bbox[4])

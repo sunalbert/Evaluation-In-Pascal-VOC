@@ -43,7 +43,7 @@ class DetmAPinVOC:
         self.num_images = len(self.image_set_index)
         print('num_images', self.num_images)
 
-        self.config = {'comp_id': 'comp4',
+        self.config = {'comp_id': 'label',
                        'use_diff': False,
                        'min_size': 2}
 
