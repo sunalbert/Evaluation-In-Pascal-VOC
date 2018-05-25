@@ -5,12 +5,12 @@
 ### the input is only a dic like this.
 
 ```
-detections@str = {
+detections@dic = {
     classid@str: {
-        imageid@numpy:[
+        imageid@str:[
             [xmin, ymin, xmax, ymax, confidence],
             ...
-        ]
+        ]@numpy
         ...
     }
     ...
