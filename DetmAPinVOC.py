@@ -12,12 +12,11 @@ import pickle
 
 
 class DetmAPinVOC:
-    def __init__(self, image_set, devkit_path, root_path='', result_path=None, mask_size=-1, binary_thresh=None):
+    def __init__(self, image_set, devkit_path, root_path='', result_path=None):
         """
         :param image_set: 2007_trainval, 2007_test, etc
         :param root_path: 'selective_search_data' and 'cache'
         :param devkit_path: data and results
-        :return: imdb object
         """
         year = image_set.split('_')[0]
         image_set = image_set[len(year) + 1: len(image_set)]
@@ -112,7 +111,6 @@ class DetmAPinVOC:
 
     def write_pascal_results(self, all_boxes):
         """
-        TODO
         write results files in pascal devkit path
         :param all_boxes: boxes to be processed [bbox, confidence]
         :return: None
@@ -138,7 +136,6 @@ class DetmAPinVOC:
 
     def do_python_eval(self):
         """
-        todo 3
         python evaluation wrapper
         :return: info_str
         """
