@@ -12,7 +12,7 @@ import pickle
 
 
 class DetmAPinVOC:
-    def __init__(self, image_set, devkit_path, root_path='', result_path=None):
+    def __init__(self, image_set, devkit_path, root_path='', result_path=None, prefix=None):
         """
         :param image_set: 2007_trainval, 2007_test, etc
         :param root_path: 'selective_search_data' and 'cache'
@@ -46,6 +46,8 @@ class DetmAPinVOC:
         self.config = {'comp_id': 'label',
                        'use_diff': False,
                        'min_size': 2}
+        if prefix is not None:
+            self.config['comp_id'] = prefix
 
     @property
     def cache_path(self):
@@ -122,10 +124,10 @@ class DetmAPinVOC:
             filename = self.get_result_file_template().format(cls)
             with open(filename, 'wt') as f:
                 for im_ind, index in enumerate(self.image_set_index):
-                    dets = all_boxes[cls_ind]
-                    if index not in dets.keys():
-                        continue
-                    dets = dets[index]
+                    dets = all_boxes[cls_ind][im_ind]
+                    # if index not in dets.keys():
+                    #     continue
+                    # dets = dets[index]
                     if len(dets) == 0:
                         continue
                     # the VOCdevkit expects 1-based indices

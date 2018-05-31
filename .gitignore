@@ -103,3 +103,8 @@ ENV/
 *.xml
 *.xml
 .idea/misc.xml
+*.xml
+*.iml
+
+cache/
+test/

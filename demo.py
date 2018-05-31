@@ -5,23 +5,27 @@
 
 import numpy as np
 import json
+import cPickle
 from DetmAPinVOC import DetmAPinVOC
 from gluoncv.data.pascal_voc.detection import VOCDetection
 
-DEBUG = True
+DEBUG = False
 
 VOC_2007_JSON_PATH = './VOC2007-SSD-512.json'
-
 
 def res_to_allbbox(voc_classes, path=VOC_2007_JSON_PATH):
     with open(path, 'r') as f:
         res = json.load(f)
-    detections = {}
+    detections = []
+    for i in range(len(voc_classes)):
+        detections.append([])
+        for j in range(4952):
+            detections[i].append([])
+
     for res_id in res.keys():
         val = res[res_id]  # [{"loc":[xmin, ymin, xmax, ymax], "soc":0.8, "clsna":"car", "clsid":6},{}...]
         im_ind = res_id[-10:-4]  # 006907
-        if im_ind == '000128':
-            print("000128")
+        im_id = pascalVOC.image_set_index.index(im_ind)
         for bbox in val:
             soc = bbox['soc']
             clsna = bbox['clsna']
@@ -29,15 +33,11 @@ def res_to_allbbox(voc_classes, path=VOC_2007_JSON_PATH):
             loc = bbox['loc']
             loc.append(float(soc))
             cls_ind = voc_classes.index(clsna)
-            if cls_ind not in detections.keys():
-                detections[cls_ind] = {}
-            if im_ind not in detections[cls_ind].keys():
-                detections[cls_ind][im_ind] = []
-            detections[cls_ind][im_ind].append(loc)
+            detections[cls_ind][im_id].append(loc)
 
-    for cls_ind in detections.keys():
+    for cls_ind in range(len(detections)):
         rr = detections[cls_ind]
-        for im_ind in rr:
+        for im_ind in range(len(rr)):
             detections[cls_ind][im_ind] = np.array(detections[cls_ind][im_ind])
     return detections
 
@@ -68,13 +68,20 @@ def from_VOC_label():
             voc_2007_det_label[i][j] = np.array(voc_2007_det_label[i][j])
     return voc_2007_det_label
 
+def from_pkl_file():
+    file_path = '/Users/yunfanlu/GithubProject/12 Mask RCNN/EvaluationInPascalVOC/test/voc_2007_test_detections.pkl'
+    with open(file_path, 'rb') as f:
+        data = cPickle.load(f)
+    return data
+
 if __name__ == '__main__':
     pascalVOC = DetmAPinVOC(
         image_set='2007_test',
         devkit_path='/Users/yunfanlu/WorkPlace/MyData/VOCDevkit')
 
     if DEBUG:
-        detections = from_VOC_label()
+        # detections = from_VOC_label()
+        detections = from_pkl_file()
     else:
         detections = res_to_allbbox(voc_classes=pascalVOC.classes)
 
